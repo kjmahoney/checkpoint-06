@@ -15,7 +15,7 @@
 Instantiate a new Angular module called `blog` that takes `ui.router` as a dependency.
 
 ```js
-// Your answer goes here...
+angular.module('blog', [])
 ```
 
 ### Question 2
@@ -28,7 +28,7 @@ One button below has an `ng-click` attribute; the other has `data-ng-click` inst
 ```
 
 ```text
-Your answer goes here...
+Prefixing 'data' to our directives will allow the html to validate .
 ```
 
 ### Question 3
@@ -36,7 +36,7 @@ Your answer goes here...
 Which of the three following options demonstrates the best usage of `ng-app`? **Explain your answer.**
 
 ```text
-Your answer goes here...
+The first makes the best use of ng-app. By placing it in the html tag, angular can be called throughout more of the document. Where in the other examples, angular cannot be called anywhere prior to the ng-app.
 ```
 
 #### A
@@ -93,7 +93,7 @@ Which one of the following concepts does this best illustrate?
 ```
 [ ] A: Modularity
 [ ] B: MVC
-[ ] C: Two-way data-binding
+[X] C: Two-way data-binding
 [ ] D: Separation of concerns
 ```
 
@@ -102,7 +102,7 @@ Which one of the following concepts does this best illustrate?
 What is the `ui-sref` directive, and how is it used?
 
 ```text
-Your answer goes here...
+ui-sref allows you to embed links in html within an angular application. It can be used to provide navigation to other views within the app.
 ```
 
 ## Part II: APIs
@@ -112,26 +112,49 @@ Your answer goes here...
 Below is an `index` controller action that maps to a `Post` model in a Rails application. How would you modify it so that it can respond with a list of posts in either HTML or JSON form, depending on the incoming HTTP request?
 
 ```rb
-class PostsController < ApplicationController
-  def index
-    @posts = Post.all
-  end
-end
+
 ```
 
 ```rb
-# Your answer goes here...
+class PostsController < ApplicationController
+  def index
+    @posts = Post.all
+
+    respond_to do |format|
+      format.html {render :index}
+      format.json {render json: @posts}
+  end
+end
 ```
 
 ### Question 7
 
 Let's say the Posts in the previous question are available when you visit `http://localhost:3000`. In a front-end application, how could you do the following using jQuery...
   1. Retrieve all the posts in JSON form
+  http://localhost:3000.json
+
   2. If Step 1 is successful, print the resulting JSON to the console
+
+  {"posts":[
+    {"author":"", "body":""},
+    {"author":"", "body":""},
+]}
+
+
   3. If Step 1 is unsuccessful, print an error message to the console
 
-```js
-// Your answer goes here...
+```
+$(".get").on("click", () => {
+  $.ajax({
+    type: 'GET',
+    dataType: 'json',
+    url: "/posts"
+  }).done((response) =>  {
+    console.log(response);
+  }).fail((response) => {
+    console.log("Ajax get request failed.");
+  })
+})
 ```
 
 ### Question 8
@@ -144,5 +167,20 @@ Using the same front-end application and Rails API from the previous question, h
 If the Post creation is successful, the new Post should be printed to the browser console. Otherwise, an error message should be printed to the console.
 
 ```js
-// Your answer goes here...
+$(".post").on("click", () => {
+  $.ajax({
+    type: 'POST',
+    data: {
+      artist: {
+        title: "sometext",
+        body: "sometext"
+    },
+    dataType: 'json',
+    url: "/posts"
+  }).done((response) =>  {
+    console.log(response);
+  }).fail((response) => {
+    console.log("AJAX POST failed");
+  })
+})
 ```
